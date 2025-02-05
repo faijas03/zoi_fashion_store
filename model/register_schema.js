@@ -21,7 +21,6 @@ const registeruser=new mongoose.Schema({
     },
     confirmpassword:{
         type:String,
-        required:true,
     },
     username:{
         type:String,
@@ -37,8 +36,13 @@ const registeruser=new mongoose.Schema({
         type:String,
         required:true,
         enum: ['male', 'female', 'other'],
-    }
-})
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user' 
+      }
+},{ versionKey: false })
 
 const registerschema=mongoose.model("registeredusers",registeruser)
 

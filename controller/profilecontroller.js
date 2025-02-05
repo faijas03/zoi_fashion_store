@@ -1,12 +1,12 @@
-const registerschema = require("../model/register_shema")
-const validation = require("./validation")
+const registerschema = require("../model/register_schema")
+const validation = require("../validation/profileupdationvalidation")
 const addressschema = require("../model/address_schema")
 const { object } = require("joi")
 
 
 exports.getprofile = async (req,res)=>{
     try {
-        
+
         const user = await registerschema.findById(req.user.userId).select("-password")
         if(!user) return res.status(404).json({error:"user not found"})
         const useraddress =  await addressschema.findOne({userId:req.user.userId})
@@ -26,7 +26,6 @@ exports.getprofile = async (req,res)=>{
 exports.profileupdate = async (req,res) =>{
     try {
     const userId = req.user.userId;
-     console.log(`profile${userId}`);
      
     const { error } = validation.validateupdateprofile.validate(req.body,{abortEarly:false})
     if(error){
@@ -46,7 +45,6 @@ exports.profileupdate = async (req,res) =>{
 
     const userfields = {}
     const addressfields = {} 
-    console.log("333");
     if(name) userfields.name=name
     if(phone) userfields.phone = phone
     if(username) userfields.username = username
@@ -71,3 +69,4 @@ exports.profileupdate = async (req,res) =>{
         res.status(400).json({message:"profile updation failed"})
     }
 } 
+
