@@ -10,11 +10,9 @@ exports.blacklistjwt = async (req, res, next) => {
     console.log(username);
     if (!token) return res.status(404).json({ error: "NO valid token" });
     blacklist.add(token);
-    res
-      .status(200)
-      .json({
-        message: `${username} logout succesfully,token moved to blacklist`,
-      });
+    res.status(200).json({
+      message: `${username} logout succesfully,token moved to blacklist`,
+    });
   } catch (error) {
     res.status(400).json({ error: "logout failed" });
   }
