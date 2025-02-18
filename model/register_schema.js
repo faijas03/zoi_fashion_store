@@ -41,7 +41,11 @@ const registeruser=new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user' 
-      }
+      },
+    isactivate: {
+        type:Boolean,
+        default:'true'
+    }  
 },{ versionKey: false })
 
 const registerschema=mongoose.model("registeredusers",registeruser)

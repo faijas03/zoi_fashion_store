@@ -1,5 +1,7 @@
+const { error } = require("console")
 const productschema = require("../model/product_schema")
 const productvalidation = require("../validation/productvalidation")
+
 exports.productsadd = async (req,res)=>{
     try {
         const {error} = productvalidation.validateproductschema.validate(req.body,{abortEarly:false})
@@ -60,5 +62,15 @@ exports.deleteproduct = async (req,res) =>{
         res.status(200).json({message:"product deleted succesfully"})    
     } catch (error) {
         res.status(400).json({error:"unable to delete product"})
+    }
+}
+
+exports.getproductbyid = async (req,res) =>{
+    try {
+       const product = await productschema.findById(req.params.id)
+       if(!product) return res.status(404).json({error:`There is no product with id :${req.params.id}`}) 
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(400).json({error:"error to fecth data"})
     }
 }

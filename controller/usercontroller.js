@@ -19,7 +19,8 @@ exports.registered=async(req,res)=>{
         username,
         phone,
         gender,
-        role
+        role,
+        isactive
     } = req.body;
     
     try {
@@ -41,7 +42,7 @@ exports.registered=async(req,res)=>{
         }
         const hashedpassword = await bcrypt.hash(password,10)
         const newuser = await registerschema({
-            name, email, password: hashedpassword, username, phone, gender,role
+            name, email, password: hashedpassword, username, phone, gender,role,isactive
         });
         await newuser.save()
         res.status(200).json({message:"registered successfully"})
@@ -56,18 +57,20 @@ exports.logined = async (req,res) =>{
     const{username,password}=req.body
     try {
         const user = await registerschema.findOne({ username })
+        
         if(!user) return res.status(400).json({error:"user not found"})
-    
         const checkpassword = await bcrypt.compare(password,user.password)
         if(!checkpassword) return res.status(400).json({error:"Incorrect password"}) 
+            if(user.isactivate === false) return res.status(403).json({ error: "Account deactivated by admin" });
         
         const token=jwt.sign({ userId: user._id },process.env.JWT_SECRET_KEY,{expiresIn:process.env.JWT_EXPIRATION})    
+         return res.status(200).send(`${token} logined succesfully`)
         
-        res.status(200).send(`${token} logined succesfully`)
     } catch (error) {
         return res.status(400).json({error:"Failed to login"})
     }  
 }
+
 
 
 
