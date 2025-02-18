@@ -1,33 +1,16 @@
 const Joi = require("joi");
 
 exports.validateaddress = Joi.object({
+  street: Joi.string().required().messages({}),
 
-   street:Joi.string()
+  city: Joi.string().required().messages({}),
+
+  state: Joi.string().required().messages({}),
+
+  postal: Joi.string()
     .required()
+    .pattern(/^\d{6}$/)
     .messages({
-      
-   }),
-
-   city:Joi.string()
-    .required()
-    .messages({
-        
-   }),
-
-   state:Joi.string()
-   .required()
-   .messages({
-       
-  }),
-
-  postal:Joi.string()
-   .required()
-   .pattern(/^\d{6}$/)
-   .messages({
-    
-       "string.pattern.base":"postal must be exactly 6 digits",
-     
-  }),
-
-})
-
+      "string.pattern.base": "postal must be exactly 6 digits",
+    }),
+});
